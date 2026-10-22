@@ -4,6 +4,7 @@
 
 import 'dart:io';
 
+import 'package:daily_you/config_provider.dart';
 import 'package:daily_you/database/attachment_storage.dart';
 import 'package:daily_you/l10n/generated/app_localizations.dart';
 import 'package:daily_you/storage/external_sync_health.dart';
@@ -402,17 +403,8 @@ CREATE TABLE $attachmentsTable (
 
   @visibleForTesting
   Future<void> createWelcomeEntry() async {
-    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
-    Locale locale;
-    if (AppLocalizations.delegate.isSupported(deviceLocale)) {
-      locale = deviceLocale;
-    } else {
-      final langOnly = Locale(deviceLocale.languageCode);
-      locale = AppLocalizations.delegate.isSupported(langOnly)
-          ? langOnly
-          : const Locale('en');
-    }
-    final l10n = await AppLocalizations.delegate.load(locale);
+    final l10n = await AppLocalizations.delegate
+        .load(ConfigProvider.instance.getContentLocale());
     final now = DateTime.now();
 
     final welcomeEntry = await EntriesProvider.instance.add(

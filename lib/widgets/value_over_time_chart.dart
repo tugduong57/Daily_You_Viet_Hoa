@@ -761,6 +761,18 @@ class _ValueOverTimeChartState extends State<ValueOverTimeChart> {
         return j.formatter.yyyy;
       }
     }
+    // Vietnamese month names ("Tháng 5") are too wide for axis labels
+    if (locale.startsWith('vi')) {
+      if (spanDays <= _monthThreshold) {
+        return DateFormat('d/M', locale).format(date);
+      } else if (spanDays <= _yearThreshold) {
+        return 'T${date.month}';
+      } else if (spanDays < 3 * _yearThreshold) {
+        return 'T${date.month}/${DateFormat('yy', locale).format(date)}';
+      } else {
+        return DateFormat('yyyy', locale).format(date);
+      }
+    }
     if (spanDays <= _monthThreshold) {
       return DateFormat('MMM d', locale).format(date);
     } else if (spanDays <= _yearThreshold) {

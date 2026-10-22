@@ -58,17 +58,8 @@ class TemplatesProvider with ChangeNotifier {
   }
 
   Future<void> createDefaultTemplates() async {
-    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
-    Locale locale;
-    if (AppLocalizations.delegate.isSupported(deviceLocale)) {
-      locale = deviceLocale;
-    } else {
-      final langOnly = Locale(deviceLocale.languageCode);
-      locale = AppLocalizations.delegate.isSupported(langOnly)
-          ? langOnly
-          : const Locale('en');
-    }
-    final l10n = await AppLocalizations.delegate.load(locale);
+    final l10n = await AppLocalizations.delegate
+        .load(ConfigProvider.instance.getContentLocale());
     final defaultTemplates = [
       Template(
           name: l10n.templateDefaultTimestampTitle,

@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:daily_you/l10n/generated/app_localizations.dart';
 import 'package:daily_you/language_option.dart';
 import 'package:daily_you/storage/secret_store.dart';
 import 'package:daily_you/time_manager.dart';
@@ -529,5 +530,21 @@ class ConfigProvider with ChangeNotifier {
       return currentOverride.toLocale();
     }
     return null;
+  }
+
+  /// Locale for content seeded into the database, such as default tags and
+  /// templates, so it matches the language the app is displayed in.
+  Locale getContentLocale() {
+    final override = getOverrideLanguage();
+    if (override != null) return override;
+
+    final deviceLocale = PlatformDispatcher.instance.locale;
+    if (AppLocalizations.delegate.isSupported(deviceLocale)) {
+      return deviceLocale;
+    }
+    final langOnly = Locale(deviceLocale.languageCode);
+    return AppLocalizations.delegate.isSupported(langOnly)
+        ? langOnly
+        : const Locale('vi');
   }
 }
