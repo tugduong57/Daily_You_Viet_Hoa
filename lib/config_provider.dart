@@ -78,8 +78,9 @@ class Settings {
       Setting<String>("videoQualityLevel", VideoQuality.medium);
   static const suppressLargeAttachmentWarning =
       Setting<bool>("suppressLargeAttachmentWarning", false);
-  static const overrideLanguage =
-      Setting<Map<String, dynamic>?>("overrideLanguage", null);
+  // Vietnamese by default; "System" (null) follows the device language
+  static const overrideLanguage = Setting<Map<String, dynamic>?>(
+      "overrideLanguage", {"languageCode": "vi"});
   static const showFlashbacks = Setting<bool>("showFlashbacks", true);
   static const excludeBadDaysFromFlashbacks =
       Setting<bool>("excludeBadDaysFromFlashbacks", false);
